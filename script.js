@@ -5,20 +5,35 @@ $("#currentDay").text(currentDay)
 var currentTime = moment().format("hh:mm:ss")
 console.log(currentTime)
 
+
+var times = []
+
+
+
 renderSched()
-// var nineAm = $("#9am").val()
 $(".saveBtn").on("click", function(){
-    localStorage.setItem("nine", $("#9am").val())
-    console.log($("#9am").val())
-    renderSched()
+    var timeBlock = $(this).parent().attr('id')
+    var timeBlockInput = "#" + timeBlock + "Input"
+    localStorage.setItem(timeBlock, $(timeBlockInput).val())
+    times.push(timeBlock)
+    localStorage.setItem("times", JSON.stringify(times))
 })
 
 function renderSched(){
-    var nine = localStorage.getItem("nine")
-    $("#9am").val(nine)
+    var storedTimes = JSON.parse(localStorage.getItem("times"))
+    if (storedTimes !== null){
+
+    times = storedTimes
+    for (var i = 0; i < storedTimes.length; i++){
+    var timeBlock = "#" + storedTimes[i] + "Input"
+    console.log(timeBlock)
+    $(timeBlock).val(localStorage.getItem(storedTimes[i]))
+    }}
 
 }
-
+// function getTimeBlock(hour) {
+//     return $("#" + hour)
+// }
 
     
     // console.log()
