@@ -1,22 +1,28 @@
+//Variable to get the date to put in Header of planner
 var currentDay = moment().format("MMMM Do YYYY")
 $("#currentDay").text(currentDay)
 
-// var currentTime = moment().format("hh:mm:ss")
-// console.log(currentTime)
-// $("#currentTime").text(moment().format("hh:mm:ss"))
-
+//Variable to get current hour to compare against for rendering colors in timeblocks based on what time it is
 var currentHour = parseInt(moment().format("H"))
 
-var times = []
-var IDs = ["nine", "ten", "eleven", "twleve", "one", "two", "three", "four", "five"]
+//Variables needed for rendering HTML from jQuery
+var IDs = ["nine", "ten", "eleven", "twelve", "one", "two", "three", "four", "five"]
 var Labels = ["9AM", "10AM", "11AM", "12PM", "1PM", "2PM", "3PM", "4PM", "5PM"]
 var LabelIds = ["9", "10", "11", "12", "13", "14", "15", "16", "17"]
 
+//Variable to hold empty array that will be filled when new events are added or removed
+var times = []
+
+//Runs function to make HTML when page is loaded
 setupPlanner()
+
+//Runs function to fill in schedule blocks from local storage any time page is loaded or refreshed
 renderSched()
+
+//Runs function to color timeblocks based on current time any time page is loaded or refreshed
 colorTimeBlocks()
 
-
+//Function to build HTML from jQuery
 function setupPlanner(){
     var container = $("<div>")
     container.addClass("container")
@@ -35,6 +41,7 @@ function setupPlanner(){
     }
 }
 
+//Function to save events to local storage any time a save button is clicked
 $(".saveBtn").on("click", function(){
     var timeBlock = $(this).parent().attr('id')
     var timeBlockInput = "#" + timeBlock + "Input"
@@ -44,6 +51,7 @@ $(".saveBtn").on("click", function(){
     localStorage.setItem("times", JSON.stringify(times))}
 })
 
+//Function to retrieve events from local storage
 function renderSched(){
     var storedTimes = JSON.parse(localStorage.getItem("times"))
     if (storedTimes !== null){
@@ -51,11 +59,11 @@ function renderSched(){
     times = storedTimes
     for (var i = 0; i < storedTimes.length; i++){
     var timeBlock = "#" + storedTimes[i] + "Input"
-    console.log(timeBlock)
     $(timeBlock).val(localStorage.getItem(storedTimes[i]))
     }}
 }
 
+//Function to color time blocks based on current time and whether the time block is past, present, or future
 function colorTimeBlocks (){
     $(".hour").each(function(){
         var thisHour = (parseInt($(this).attr("id")))
